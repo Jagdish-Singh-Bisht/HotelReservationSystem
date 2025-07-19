@@ -29,7 +29,7 @@ public class HotelReservationSystem {
 
 
             url = props.getProperty("url");
-            username = props.getProperty("username");
+            username = props.getProperty("user");
             password = props.getProperty("password");
 
 
