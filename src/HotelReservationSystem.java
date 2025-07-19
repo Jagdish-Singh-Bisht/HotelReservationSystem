@@ -1,3 +1,9 @@
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+
+
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -8,15 +14,31 @@ import java.sql.ResultSet;
 
 
 public class HotelReservationSystem {
-    private static final String url = "jdbc:mysql://localhost:3306/hotel";
-    private static final String username = "root";
-    private static final String password = "@RsBtAhVpLj004";
-
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
+        Properties props = new Properties();
+
+        String url = null;
+        String username = null;
+        String password = null;
+
+
         try{
+            // Load Properties File
+            FileInputStream fis = new FileInputStream("db.properties");
+            props.load(fis);
+
+
+            url = props.getProperty("url");
+            username = props.getProperty("username");
+            password = props.getProperty("password");
+
+
             Class.forName("com.mysql.cj.jdbc.Driver");
+
+        }catch (IOException e) {
+            System.out.println("Couldn't load properties: " + e.getMessage());
         }catch (ClassNotFoundException e){
-            System.out.println(e.getMessage());
+            System.out.println("JDBC Driver not found: " + e.getMessage());
         }
 
         try{
@@ -58,8 +80,8 @@ public class HotelReservationSystem {
                 }
             }
 
-        }catch (SQLException e){
-            System.out.println(e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("SQL Exception: " + e.getMessage());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -90,7 +112,7 @@ public class HotelReservationSystem {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -145,7 +167,7 @@ public class HotelReservationSystem {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
     private static void updateReservation(Connection connection, Scanner scanner) {
@@ -181,7 +203,7 @@ public class HotelReservationSystem {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -207,7 +229,7 @@ public class HotelReservationSystem {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
@@ -221,7 +243,7 @@ public class HotelReservationSystem {
                 return resultSet.next(); // If there's a result, the reservation exists
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
             return false; // Handle database errors as needed
         }
     }
